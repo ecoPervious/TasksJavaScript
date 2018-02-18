@@ -1,6 +1,4 @@
 
-document.getElementById("denominator_a").setAttribute("onclick", "onKeyUp");
-
 function onKeyUp() {
 
     var denominator_a = document.getElementById("denominator_a").value;
@@ -14,17 +12,19 @@ function onKeyUp() {
 
     }
 
-    var numerator_a = document.getElementById("numerator_a").value;
-    var numerator_b = document.getElementById("numerator_b").value;
+    var sign = document.getElementById("sign").textContent;
+    sign = sign === "+" ? true : false;
 
-    var numerator_r = numerator_a * numerator_b;
-    var denominator_r = denominator_a * denominator_b;
+    var FNA = FractionalNumber(document.getElementById("numerator_a").value, denominator_a);
+    var FNB = FractionalNumber(document.getElementById("numerator_b").value, denominator_b);
 
-    var result = getAbbreviatedFraction(numerator_r, denominator_r);
+    if (sign){
+        FNA.addFN(FNB);
+    }
 
-    document.getElementById("numerator_r").value = result[0];
-    document.getElementById("denominator_r").value = result[1];
-    document.getElementById("sign_r").textContent = result[2] ? "" : " - ";
+    document.getElementById("numerator_r").value = FNA.numerator;
+    document.getElementById("denominator_r").value = FNA.denominator;
+    document.getElementById("sign_r").textContent = FNA.getSign() ? "" : " - ";
 
 
 }
