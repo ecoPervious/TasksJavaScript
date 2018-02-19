@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <title>Task 1.13</title>
     <link rel="stylesheet" href="1_13.css" type="text/css">
-    <script src="JS/1_13.js" language="JavaScript"></script>
+    <script src="JS/Listeners.js"></script>
+    <script src="JS/FractionalNumber.js" language="JavaScript"></script>
+    <script src="JS/GUI.js" language="JavaScript"></script>
 
 </head>
 
@@ -16,41 +18,44 @@
     <table>
         <tr>
             <td>1-ая дробь</td>
-            <td> </td>
+            <td></td>
             <td>2-ая дробь</td>
-            <td> </td>
+            <td></td>
             <td>Результат</td>
         </tr>
         <tr>
             <td>
                 <div id="fractional_number_a" class="div_fractional_number">
-                    <input class="input_number" id="numerator_a" type="number" onkeyup="onKeyUp()" onclick="onKeyUp()"/>
-                    <input class="input_number" id="denominator_a" type="number" onkeyup="onKeyUp()"
-                           onclick="onKeyUp()"/>
+                    <input class="in_num" id="numerator_a" type="number" onkeyup="onKeyUpFN()" onclick="onClickFN()"/>
+                    <input class="in_num" id="denominator_a" type="number" onkeyup="onKeyUpFN()" onclick="onClickFN()"/>
                 </div>
             </td>
+
             <td>
-                <h1 class="mathematical_sign" onclick="">*</h1>
+                <h1 class="mathematical_sign" id="sign" onclick="onClickSign()">+</h1>
             </td>
+
             <td>
                 <div id="fractional_number_b" class="div_fractional_number">
-                    <input class="input_number" id="numerator_b" type="number" onkeyup="onKeyUp()" onclick="onKeyUp()"/>
-                    <input class="input_number" id="denominator_b" type="number" onkeyup="onKeyUp()"
-                           onclick="onKeyUp()"/>
+                    <input class="in_num" id="numerator_b" type="number" onkeyup="onKeyUpFN()" onclick="onClickFN()"/>
+                    <input class="in_num" id="denominator_b" type="number" onkeyup="onKeyUpFN()" onclick="onClickFN()"/>
                 </div>
             </td>
+
             <td>
                 <h1 class="mathematical_sign">=</h1>
             </td>
+
             <td>
                 <div class="div_result">
-                    <h1 class="mathematical_sign" id="sign_r"></h1>
+                    <h1 class="mathematical_sign" id="sign_r">-</h1>
                     <div id="fractional_number_r" class="div_fractional_number">
-                        <input class="input_number" id="numerator_r" type="number" disabled/>
-                        <input class="input_number" id="denominator_r" type="number" disabled/>
+                        <input class="in_num" id="numerator_r" type="number" disabled/>
+                        <input class="in_num" id="denominator_r" type="number" disabled/>
                     </div>
                 </div>
             </td>
+
         </tr>
     </table>
 
