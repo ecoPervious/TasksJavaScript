@@ -17,23 +17,31 @@
 </p>
 <table>
     <tr>
-        <td>Обычная запись:</td>
-        <td>3+4</td>
-        <td>(5-4)+2</td>
-        <td>2 * (3 + 4) * 5</td>
+        <td>Обычная запись</td>
+        <td> = </td>
+        <td>Постфиксная запись</td>
     </tr>
     <tr>
-        <td>Постфиксная запись:</td>
+        <td>3+4</td>
+        <td> = </td>
         <td>34+</td>
+    </tr>
+    <tr>
+        <td>(5-4)+2</td>
+        <td> = </td>
         <td>54-2+</td>
+    </tr>
+    <tr>
+        <td>2 * (3 + 4) * 5</td>
+        <td> = </td>
         <td>234+*5*</td>
     </tr>
+    <tr>
+        <td><input id="in" type="text" onclick="onClick()", onkeyup="onKeyUp()"/></td>
+        <td> = </td>
+        <td><input class="out" id="out" type="text" disabled/></td>
+    </tr>
 </table>
-<div>
-    <input id="in" type="text" onclick="onClick()", onkeyup="onKeyUp()"/>
-    =
-    <input class="out" id="out" type="text" disabled/>
-</div>
 
 <p id="console">
 
