@@ -3,9 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>2.26</title>
-    <script src="Main.js" language="JavaScript"></script>
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <script src="JS/Listeners.js" language="JavaScript"></script>
+    <script src="JS/PostfixForm.js" language="JavaScript"></script>
+    <script src="JS/GUI.js" language="JavaScript"></script>
 </head>
-<body onload="Main()">
+<body>
 
 <p>
     Преобразовать выражение (т.е. текст специального вида), составленное из цифр и знаков четырех арифметических
@@ -26,12 +29,14 @@
         <td>234+*5*</td>
     </tr>
 </table>
+<div>
+    <input id="in" type="text" onclick="onClick()", onkeyup="onKeyUp()"/>
+    =
+    <input class="out" id="out" type="text" disabled/>
+</div>
 
 <p id="console">
 
-
 </p>
-
-
 </body>
 </html>
