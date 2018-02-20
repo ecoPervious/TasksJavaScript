@@ -17,8 +17,6 @@ function upDateResult() {
 
     }
 
-
-
     denominator_a = parseInt(denominator_a);
     denominator_b = parseInt(denominator_b);
 
@@ -52,8 +50,8 @@ function setResult(numerator, denominator, sign) {
         sign = true;
     }
 
-    document.getElementById("numerator_r").value = numerator;
-    document.getElementById("denominator_r").value = denominator;
+    document.getElementById("numerator_r").value = Math.abs(numerator);
+    document.getElementById("denominator_r").value = Math.abs(denominator);
     document.getElementById("sign_r").textContent = sign ? "" : " - ";
 
 }
