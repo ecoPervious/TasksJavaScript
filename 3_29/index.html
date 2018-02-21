@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>3.29</title>
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <script src="JS_3_29/Listeners.js" language="JavaScript"></script>
+    <script src="JS_3_29/MiddleLine.js" language="JavaScript"></script>
+    <script src="JS_3_29/GUI.js" language="JavaScript"></script>
+</head>
+<body onload="Main()">
+<p>
+    Задан массив A[N]. Написать программу определения значения k,
+    при котором величина | А[0]+...+А[k]–A[k+1]–...–A[N–1] |  минимальна.
+</p>
+<table>
+    <tr>
+        <td>Введите числа через пробел, можно вещественные: </td>
+        <td><input class="field" id="in" type="text" onclick="onClick()" onkeyup="onKeyUp()"/></td>
+    </tr>
+    <tr>
+        <td>Средняя линия будет находиться на элементе с индексом: </td>
+        <td><input class="field" id="out" type="text" disabled/></td>
+    </tr>
+</table>
+
+</body>
+</html>
