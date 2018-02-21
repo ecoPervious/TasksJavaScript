@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <title>3_34</title>
     <link rel="stylesheet" href="style.css" type="text/css">
-    <script src="Main.js" language="JavaScript"></script>
+    <script src="JS/Listeners.js" language="JavaScript"></script>
+    <script src="JS/Main.js" language="JavaScript"></script>
 </head>
 <body onload="generationTable()">
 <table id="main_table">
@@ -12,7 +13,9 @@
 </table>
 <table>
     <tr>
-        <td><input class="button" type="button" value="Случайная генерация чисел" onclick="onClickButtonRandom()"/></td>
+        <td>
+            <input class="button" type="button" value="Сгенерировать случайные числа" onclick="onClickButtonRandom()"/>
+        </td>
         <td>От</td>
         <td><input id="min_random" class="text" type="number"/></td>
         <td>До</td>
@@ -20,11 +23,11 @@
     </tr>
     <tr>
         <td>
-            <input class="button" type="button" value="Установить везде ноль"/>
+            <input class="button" type="button" value="Установить везде нули" onclick="onClickSetZeroAllCells()"/>
         </td>
     </tr>
 </table>
-<h2 id="input_id_cell">
+<h2 id="id_cell_max_value">
 
 </h2>
 
