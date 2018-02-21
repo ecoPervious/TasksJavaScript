@@ -1,9 +1,123 @@
+/**
+ * Основные понятия использующиеся в комментариях/документации:
+ *
+ * 1. Постфиксная форма (PostfixForm) - такая форма записи математического выражения, когда сначала записываются
+ * операнды, а затем знак операции, например: (3+5)*8 = 35+8*.
+ *
+ * 2. Переходная форма (TransitionalForm) - переходная форма необходима, что бы в процессе преобразования строки
+ * различить уже преобразованные символы и ещё не преобразованные, суть её заключается в переводе преобразованной
+ * части строки в специальные буквенные символы, то есть замена каждой цифры и знака на определенную букву.
+ *
+ * 3. Математические символы/знаки первого порядка - это те математические знаки, операции которых выполняются первыми,
+ * то есть умножение и деление. Скобки входят в отдельную группу.
+ *
+ * 4. Математические символы/знаки второго порядка - это те математические знаки, операции которых выполняются вторыми,
+ * то есть сложение и вычитание. Скобки входят в отдельную группу.
+ *
+ *
+ *
+ */
+
+
+/**------------------------------------------------------------------------------------------------------------------*/
+
+/**
+ * function getPostfixForm
+ *
+ * Функция преобразует входную строку (предполагается, что строка это корректное математическое выражение) в
+ * "переходную форму". После чего из переходной формы переводит в постфиксную запись выражения. Возвращает результат.
+ *
+ * @param {string} str - математическое выражение
+ */
 function getPostfixForm(str) {
     var s = getTransitionalForm(str);
     //alert("PF: " + s);
     return getPostfixFormToTransitional(s);
 }
 
+/*
+Функции преобразующие "переходную" ворму в постфиксную форму.
+ */
+
+/**
+ * function getNormalSymbol
+ *
+ * Преобразует один переходный символ в нормальный/обычный символ.
+ * В случае, если символ не обнаружен или переданна более длинная строка, возвращается переданная строка.
+ *
+ * @param transitionalSymbol - переходный символ.
+ * @returns {string} - строка с единственным нормальным символом.
+ */
+function getNormalSymbol(transitionalSymbol) {
+
+    switch (transitionalSymbol) {
+        case "Q":
+            return "1";
+        case "W":
+            return "2";
+        case "E":
+            return "3";
+        case "R":
+            return "4";
+        case "T":
+            return "5";
+        case "Y":
+            return "6";
+        case "U":
+            return "7";
+        case "I":
+            return "8";
+        case "O":
+            return "9";
+        case "P":
+            return "0";
+        case "A":
+            return "+";
+        case "S":
+            return "-";
+        case "D":
+            return "*";
+        case "F":
+            return "/";
+    }
+
+    return transitionalSymbol;
+}
+
+/**
+ * function getPostfixFormToTransitional
+ *
+ * Преобразует входную строку, предположительно записанную в переходной форме, в постфиксную запись, то есть
+ * просто преобразует каждый символ с помощью функции getNormalSymbol().
+ *
+ * @param {string} transitionalString - строка в переходной форме.
+ * @returns {string} - строка в постфиксной форме.
+ */
+function getPostfixFormToTransitional(transitionalString) {
+
+    var result = "";
+
+    for (var i = 0; i < transitionalString.length; i++) {
+        result += getNormalSymbol(transitionalString.charAt(i));
+    }
+
+    return result;
+
+}
+
+/*
+Функции преобразующие обычное математическое выражение в "переходную форму".
+ */
+
+/**
+ * function getTransitionalSymbol
+ *
+ * Возвращает "переходный символ", соответствующий входному нормальному символу. В случае, если входной символ не
+ * предусмотрен в математическом выражение или передан не один символ, а строка, то возвращается входная строка.
+ *
+ * @param {string} normalSymbol - нормальный символ.
+ * @returns {string} - переходный символ.
+ */
 function getTransitionalSymbol(normalSymbol) {
 
     switch (normalSymbol) {
@@ -41,12 +155,36 @@ function getTransitionalSymbol(normalSymbol) {
 
 }
 
-function getTransitionalString(arg1, arg2, operation) {
+/**
+ * function getTransitionalPostfixFormString
+ *
+ * Функция пытается преобразовать переданные ей аргументы и операцию в "переходную форму", после чего формирует
+ * порядок записи как в постфиксной форме и возвращает строку. На выходе должна получится строка:
+ * arg1 + arg2 + operation
+ *
+ * Важно то, что сами аргументы и операция может быть уже в переходной форме, особенно это важно для аргументов,
+ * в процессе преобразования строки, может случиться так, что один из аргументов уже преобразован, но для нас это не
+ * так важно, т.к. нам важнее, что бы относительно данной (входной) операции он стоял на нужном месте.
+ *
+ * @param {string} arg1 - запись первого аргумент в переходной или нормальной форме.
+ * @param {string} arg2 - запись второго аргумента в переходной или нормальной форме.
+ * @param {string} operation - запись операции в переходной или нормальной форме.
+ * @returns {string}
+ */
+function getTransitionalPostfixFormString(arg1, arg2, operation) {
 
-    return getTransitionalSymbols(arg1) + getTransitionalSymbols(arg2) + getTransitionalSymbols(operation);
+    return getTransitionalString(arg1) + getTransitionalString(arg2) + getTransitionalString(operation);
 }
 
-function getTransitionalSymbols(str) {
+/**
+ * function getTransitionalString
+ *
+ * Преобразует все символы строки в символы переходной формы.
+ *
+ * @param {string} str - строка записанная нормальными символами.
+ * @returns {string} - строка записанная "переходными символами".
+ */
+function getTransitionalString(str) {
 
     var result = "";
 
@@ -58,6 +196,21 @@ function getTransitionalSymbols(str) {
 
 }
 
+/**
+ * function getTransitionalForm
+ *
+ * Функция преобразует обычную запись выражения в "переходную форму".
+ *
+ * О процессе перевода в "переходную форму":
+ *
+ * 1. Преобразует части выражения в скобках. Внимание! Преобразование происходит рекурсивно передавая выражение в
+ * скобках в эту же функцию.
+ * 2. Преобразует математические операции "первого порядка".
+ * 3. Преобразует математические операции "второго порядка".
+ *
+ * @param {string} str - обычное математическое выражение.
+ * @returns {string} - выражение в переходной форме.
+ */
 function getTransitionalForm(str) {
 
     /*
@@ -164,7 +317,7 @@ function getTransitionalForm(str) {
                     end_arg_2 = i;
                 }
 
-                var postfix = getTransitionalString(str.substring(begin_arg_1, mid_sign),
+                var postfix = getTransitionalPostfixFormString(str.substring(begin_arg_1, mid_sign),
                     str.substring(mid_sign + 1, end_arg_2),
                     str.substring(mid_sign, mid_sign + 1));
 
@@ -222,7 +375,7 @@ function getTransitionalForm(str) {
 
                 }
 
-                var postfix = getTransitionalString(str.substring(begin_arg_1, mid_sign),
+                var postfix = getTransitionalPostfixFormString(str.substring(begin_arg_1, mid_sign),
                     str.substring(mid_sign + 1, end_arg_2),
                     str.substring(mid_sign, mid_sign + 1));
 
@@ -251,82 +404,90 @@ function getTransitionalForm(str) {
 
 }
 
-function getNormalSymbol(transitionalSymbol) {
-
-    switch (transitionalSymbol) {
-        case "Q":
-            return "1";
-        case "W":
-            return "2";
-        case "E":
-            return "3";
-        case "R":
-            return "4";
-        case "T":
-            return "5";
-        case "Y":
-            return "6";
-        case "U":
-            return "7";
-        case "I":
-            return "8";
-        case "O":
-            return "9";
-        case "P":
-            return "0";
-        case "A":
-            return "+";
-        case "S":
-            return "-";
-        case "D":
-            return "*";
-        case "F":
-            return "/";
-    }
-
-    return transitionalSymbol;
-}
-
-function getPostfixFormToTransitional(str) {
-
-    var result = "";
-
-    for (var i = 0; i < str.length; i++) {
-        result += getNormalSymbol(str.charAt(i));
-    }
-
-    return result;
-
-}
-
 /*
     Функции для проверки принадлежности символа к той или иной группе символов.
  */
 
+/**
+ * function isParenthesis
+ *
+ * Проверяет, является ли переданный символ круглой скобкой "(" или ")".
+ *
+ * @param {string} symbol - символ.
+ * @returns {boolean} - true, если является "(" или ")"; false, иначе.
+ */
 function isParenthesis(symbol) {
     return isParenthesisClose(symbol) || isParenthesisOpen(symbol);
 }
 
+/**
+ * function isParenthesisClose
+ *
+ * Функция проверяет является ли символ закрывающей скобкой ")".
+ *
+ * @param {string} str - символ.
+ * @returns {boolean} - true, если является ")"; false, иначе.
+ */
 function isParenthesisClose(str) {
     return str === ")";
 }
 
+/**
+ * function isParenthesisOpen
+ *
+ * Функция проверяет является ли символ открывающей скобкой "(".
+ *
+ * @param {string} str - символ.
+ * @returns {boolean} - true, если является "("; false, иначе.
+ */
 function isParenthesisOpen(str) {
     return str === "(";
 }
 
+/**
+ * function isMathSign
+ *
+ * Функция проверяет является ли символ математическим знаком "+", "-", "*", "/".
+ *
+ * @param {string} str - символ.
+ * @returns {boolean} - true, если является "+", "-", "*", "/"; false, иначе.
+ */
 function isMathSign(str) {
     return isMathSignOne(str) || isMathSignTwo(str);
 }
 
+/**
+ * function isMathSignOne
+ *
+ * Функция проверяет является ли символ математическим знаком первого порядка "*", "/".
+ *
+ * @param {string} str - символ.
+ * @returns {boolean} - true, если является "*", "/"; false, иначе.
+ */
 function isMathSignOne(str) {
     return str === "*" || str === "/";
 }
 
+/**
+ * function isMathSignTwo
+ *
+ * Функция проверяет является ли символ математическим знаком второго порядка "+", "-".
+ *
+ * @param {string} str - символ.
+ * @returns {boolean} - true, если является "+", "-"; false, иначе.
+ */
 function isMathSignTwo(str) {
     return str === "+" || str === "-";
 }
 
+/**
+ * function isNumeric
+ *
+ * Функция проверяет является ли символ цифрой "1", "2", "3", "4", "5", "6", "7", "8", "9", "0".
+ *
+ * @param {string} str - символ.
+ * @returns {boolean} - true, если является "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"; false, иначе.
+ */
 function isNumeric(str) {
     if (str === "1") return true;
     if (str === "2") return true;
@@ -341,11 +502,33 @@ function isNumeric(str) {
     return false;
 }
 
-function println(str) {
-    document.getElementById("console").innerHTML += str + "<br/>";
+/**
+ * function isTrueSymbol
+ *
+ * Функция проверяет является ли символ разрешенным:
+ * "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "+", "-", "*", "/".
+ *
+ * @param {string} symbol - символ.
+ * @returns {boolean} - true, если "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "+", "-", "*", "/"; false, иначе.
+ */
+function isTrueSymbol(symbol) {
+    return isMathSign(symbol) || isParenthesis(symbol) || isNumeric(symbol);
 }
 
-function isAllTrueSymbols(str) {
+/*
+Функции для проверки строки на соответствие тех или иных правил.
+ */
+
+/**
+ * function isTrueString
+ *
+ * Функция проверяет каждый символ с помощью функции isTrueSymbol. Возвращает false, если хотя бы раз isTrueSymbol
+ * вернула false, иначе true.
+ *
+ * @param {string} str - входная строка с математическим выражением.
+ * @returns {boolean} - true, если все символы разрешены; false, если встретился хотя бы один запрещенный.
+ */
+function isTrueString(str) {
     for(var i = 0; i < str.length; i++){
         if (!isTrueSymbol(str.charAt(i))){
             alert(str.charAt(i));
@@ -355,10 +538,14 @@ function isAllTrueSymbols(str) {
     return true;
 }
 
-function isTrueSymbol(symbol) {
-    return isMathSign(symbol) || isParenthesis(symbol) || isNumeric(symbol);
-}
-
+/**
+ * function isNotSingleDigitNumbers
+ *
+ * Функция проверяет наличие неодноразрядных чисел.
+ *
+ * @param {string} str - математическое выражение.
+ * @returns {boolean} - true, если имеются неодноразрядные числа; false, иначе.
+ */
 function isNotSingleDigitNumbers(str) {
 
     var symbol = str.charAt(0);
@@ -373,6 +560,25 @@ function isNotSingleDigitNumbers(str) {
     return false;
 }
 
+/**
+ * function isRepeatMathSign
+ *
+ * Функция проверяет наличие повторяющихся математических знаков, есть три варианта работы данной функции:
+ *
+ * 1. Отсутствуют повторяющиеся знаки, возвращается 0.
+ * 2. Присутствуют критические ситуации, которые можно преобразовать с помощью специальных функций:
+ *      а) "++";
+ *      б) "+-";
+ *      в) "-+";
+ *      г) "--";
+ *      д) "**";
+ *      е) "//";
+ *    В таком случае возвращается количество критических ситуаций.
+ * 3. Присутствуют случаи, когда рядом стоящих символов более одного и они не попадают под пункт 2. Возвращается -1.
+ *
+ * @param {string} str - математическое выражение.
+ * @returns {number} - количество критических ситуаций, или -1, если это уже непреодолимые ситуации.
+ */
 function isRepeatMathSign(str) {
 
     var symbol = str.charAt(0);
@@ -421,9 +627,19 @@ function isRepeatMathSign(str) {
     return count_critical_situations;
 }
 
+/**
+ * function isErrorParentheses
+ *
+ * Функция проверяет правильность расстановки скобок.
+ *
+ * @param {string} str - математическое выражение.
+ * @returns {boolean} - true, если имеются ошибки; false, иначе.
+ */
 function isErrorParentheses(str){
 
-    for(var i = 0, count = 0; i < str.length; i++){
+    var count = 0;
+
+    for(var i = 0; i < str.length; i++){
 
         if (isParenthesisOpen(str.charAt(i))){
             count++;
@@ -437,9 +653,26 @@ function isErrorParentheses(str){
 
     }
 
+    if(count !== 0){
+        return true;
+    }
+
     return false;
 }
 
+/*
+Функции для удаления повторяющихся математических знаков
+ */
+
+/**
+ * function removeRepeatAllMathSign
+ *
+ * Функция устарела. Она запускала функцию removeRepeatMathSign до тех пор, пока не осталось бы критических случаев
+ * повторения знаков.
+ *
+ * @param {string} str - математическое выражение
+ * @returns {string} - исправленное математическое выражение.
+ */
 function removeRepeatAllMathSign(str) {
 
     while (isRepeatMathSign(str)){
@@ -448,6 +681,14 @@ function removeRepeatAllMathSign(str) {
     return str;
 }
 
+/**
+ * function removeRepeatMathSign
+ *
+ * Функция удаляет ситуации с критическим повторением математических знаков.
+ *
+ * @param {string} str - математическое выражение.
+ * @returns {string} - исправленное математическое выражение.
+ */
 function removeRepeatMathSign(str) {
 
     var symbol = str.charAt(0);
