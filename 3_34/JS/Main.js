@@ -50,7 +50,6 @@ function setBackgroundColorAllCell(color) {
             setBackgroundColorCell(getId(tr, td),color);
         }
     }
-
 }
 
 /**
