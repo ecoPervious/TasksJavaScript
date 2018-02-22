@@ -1,0 +1,10 @@
+.cell{
+    height: 30pt;
+    width: 30pt;
+    text-align: center;
+    background-color: white;
+}
+
+.button{
+    width: 300pt;
+}

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>4.13</title>
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <script src="JS/GUI.js" language="JavaScript"></script>
+    <script src="JS/Listeners.js" language="JavaScript"></script>
+</head>
+<body>
+<p>
+    Дана матрица А размерности MxN, состоящая из вещественных чисел. Найти величину x1xn + x2 xn-1 + ... + xnx1,
+    где xi  максимальный элемент i-й строки матрицы A.
+</p>
+<table>
+    <tr>
+        <td>
+            <input class="button" type="button" value="Сгенерировать случайные числа"
+                   onclick="onClickGenerationRandom()"/>
+        </td>
+        <td>От минимум: </td>
+        <td><input id="min_random" class="text" type="number"/></td>
+        <td>До максимум: </td>
+        <td><input id="max_random" class="text" type="number"/></td>
+    </tr>
+    <tr>
+        <td>
+            <input class="button" type="button" value="Сгенерировать таблицу" onclick="onClickGenerationTable()"/>
+        </td>
+        <td>Количество строк (M): </td>
+        <td><input id="size_m" class="text" type="number" min="0"/></td>
+        <td>Количество столбцов (N): </td>
+        <td><input id="size_n" class="text" type="number" min="0"/></td>
+    </tr>
+    <tr>
+        <td>
+            <input class="button" type="button" value="Установить везде нули" onclick="onClickSetZeroAllCells()"/>
+        </td>
+        <td>
+            <input id="checkbox" type="checkbox" onclick="onClickCheckBox()"/>
+        </td>
+        <td>
+            Суммировать повторяющиеся
+        </td>
+        <td>
+            Сумма:
+        </td>
+        <td>
+            <input id="result" type="text" disabled/>
+        </td>
+
+    </tr>
+</table>
+<table id="main_table">
+
+</table>
+
+</body>
+</html>
