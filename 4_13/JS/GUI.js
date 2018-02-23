@@ -1,3 +1,8 @@
+/**
+ * function upDateTableValueColorMax
+ *
+ * Функция находит максимальные значения внутри тыблицы, обновляет раскраску таблицы.
+ */
 function upDateTableValueColorMax() {
 
     setBackgroundColorAllCell("white")
@@ -29,7 +34,9 @@ function generationTable(myM, myN) {
                 "class='cell' " +
                 "id='" + getIdCell(m, n) + "' " +
                 "type='number' " +
-                "onkeyup='onKeyUpCell()'/></td>";
+                "onkeyup='onKeyUpCell(this.id)'" +
+                "step='0.1'/>" +
+                "</td>";
 
         }
 
@@ -44,17 +51,18 @@ function generationTable(myM, myN) {
 }
 
 /**
- * function randomInteger
+ * function generationRandomFloat
  *
- * Функция рандомно генерирует число от min до max.
+ * Функция рандомно генерирует число от min до max. Об особенностях генерации:
+ * генерируется вещественное число, при этом округление происходит до 0,01.
  *
- * @param {int} min - минимальное значение рандомно сгенерированного числа.
- * @param {int} max - максимальное значение рандомно сгенерированного числа.
- * @return {int} - рандомное число.
+ * @param {int|float} min - минимальное значение рандомно сгенерированного числа.
+ * @param {int|float} max - максимальное значение рандомно сгенерированного числа.
+ * @return {float} - рандомное число.
  */
-function generationRandomInteger(min, max) {
+function generationRandomFloat(min, max) {
     var rand = min + Math.random() * (max - min)
-    rand = Math.round(rand);
+    rand = Math.round(rand / 0.01) * 0.01;
     return rand;
 }
 
@@ -70,7 +78,7 @@ function generationRandomValuesTable() {
 
     for (var tr = 0; tr < m; tr++) {
         for (var td = 0; td < n; td++) {
-            setValueCell(getIdCell(tr, td), generationRandomInteger(getValueMinRandom(), getValueMaxRandom()));
+            setValueCell(getIdCell(tr, td), generationRandomFloat(getValueMinRandom(), getValueMaxRandom()));
         }
     }
 }
@@ -106,16 +114,39 @@ function setValueAllCells(value) {
     }
 }
 
+/**
+ * function getSumMaxValueInStrings
+ *
+ * Функция возвращает сумму максимальных значений в каждой строчке. В случае если переданный флаг true,
+ * то при нахождение нескольких максимальных значений в одной строчке, она их суммирует.
+ *
+ * @param {boolean} is_sum_repeat
+ */
 function getSumMaxValueInStrings(is_sum_repeat) {
 
-    if(is_sum_repeat){
+    if (is_sum_repeat) {
         return getSumMaxValueInStringsTrueRepeat();
-    }else{
+    } else {
         return getSumMaxValueInStringsFalseRepeat();
     }
 
 }
 
+/**
+ * function getSumMaxValueInStringsFalseRepeat
+ *
+ * Функция находит в каждой строчке таблицы максимальное значение, после чего закрашивает все ячейки с максимальным
+ * значением для определенной строчки. Если в строке имеется несколько значений с максимальным значением,
+ * то закрашивает все.
+ *
+ * В случае, если в ячейке некорректно введено число и из значения в ячейки невозможно получить float, ячейка
+ * окрашивается в красный цвет.
+ *
+ * Сумма максимальных ячеек строчек суммируется и возвращается. Если в ячейки несколько максимальных значений, то
+ * суммируется только одно из них.
+ *
+ * @return {number} - сумма максимальных значений.
+ */
 function getSumMaxValueInStringsFalseRepeat() {
 
     var m = getValueM();
@@ -125,15 +156,20 @@ function getSumMaxValueInStringsFalseRepeat() {
 
     for (var myM = 0; myM < m; myM++) {
 
-        var max = 0;
+        var max = "NaN";
 
-        if (1 < n) {
-            max = getValueInputNumber(getIdCell(myM, 0))
-        }
         for (var myN = 0; myN < n; myN++) {
 
-            var value = getValueInputNumber(getIdCell(myM, myN));
-            if (value > max){
+            var id = getIdCell(myM, myN);
+            var value = getValueCell(id);
+
+            if (value === "NaN") {
+                setBackgroundColorById(id, "red");
+                continue;
+            } else {
+                setBackgroundColorById(id, "white");
+            }
+            if (value > max || max === "NaN") {
                 max = value;
             }
         }
@@ -143,6 +179,21 @@ function getSumMaxValueInStringsFalseRepeat() {
     return sum;
 }
 
+/**
+ * function getSumMaxValueInStringsTrueRepeat
+ *
+ * Функция находит в каждой строчке таблицы максимальное значение, после чего закрашивает все ячейки с максимальным
+ * значением для определенной строчки. Если в строке имеется несколько значений с максимальным значением,
+ * то закрашивает все.
+ *
+ * В случае, если в ячейке некорректно введено число и из значения в ячейки невозможно получить float, ячейка
+ * окрашивается в красный цвет.
+ *
+ * Сумма максимальных ячеек строчек суммируется и возвращается. Если в ячейки несколько максимальных значений, то
+ * суммируется все из них.
+ *
+ * @return {number} - сумма максимальных значений.
+ */
 function getSumMaxValueInStringsTrueRepeat() {
 
     var m = getValueM();
@@ -152,49 +203,65 @@ function getSumMaxValueInStringsTrueRepeat() {
 
     for (var myM = 0; myM < m; myM++) {
 
-        var max = 0;
+        var max = "NaN";
         var count = 0;
 
-        if (1 < n) {
-            max = getValueInputNumber(getIdCell(myM, 0))
-        }
         for (var myN = 0; myN < n; myN++) {
 
-            var value = getValueInputNumber(getIdCell(myM, myN));
-            if (value > max){
+            var id = getIdCell(myM, myN);
+            var value = getValueCell(id);
+
+            if (value === "NaN") {
+                setBackgroundColorById(id, "red");
+                continue;
+            } else {
+                setBackgroundColorById(id, "white");
+            }
+
+            if (value > max || max === "NaN") {
                 max = value;
                 count = 1;
-            }else if(value === max){
+            } else if (value === max) {
                 count++;
             }
         }
+
         setBackgroundColorCellValueInString(myM, max, "green");
         sum += (max * count);
     }
     return sum;
 }
 
+/**
+ * function setBackgroundColorCellValueInString
+ *
+ * Функция закрашивает все ячейки строки под номером myM, которые содержат значение value в цвет color.
+ *
+ * @param {int} myM - номер строки
+ * @param {float} value - значение
+ * @param {string} color - название цвета.
+ */
 function setBackgroundColorCellValueInString(myM, value, color) {
 
     var n = getValueN();
-    for(var myN = 0; myN < n; myN++){
+    for (var myN = 0; myN < n; myN++) {
         var id = getIdCell(myM, myN);
-        var v = getValueInputNumber(id);
-        if(v === value){
-            setBackgroundColorCell(id, color);
+        var v = getValueCell(id);
+        if (v === value) {
+            setBackgroundColorById(id, color);
         }
     }
 }
 
 /**
- * function setBackgroundColorCell
+ * function setBackgroundColorById
  *
- * Функция закрашивает ячейку с id="id" в цвет="color".
+ * Функция устанавливает backgroundColor для элемента с переданным id.
  *
- * @param {string} id - id ячейки.
+ * @param {string} id - id элемента.
  * @param {string} color - название цвета.
  */
-function setBackgroundColorCell(id, color) {
+function setBackgroundColorById(id, color) {
     document.getElementById(id).style.backgroundColor = color;
 }
 
@@ -210,15 +277,78 @@ function setBackgroundColorAllCell(color) {
     var m = getValueM();
     var n = getValueN();
 
-    for(var tr = 0; tr < m; tr++){
-        for(var td = 0; td < n; td++){
-            setBackgroundColorCell(getIdCell(tr, td),color);
+    for (var tr = 0; tr < m; tr++) {
+        for (var td = 0; td < n; td++) {
+            setBackgroundColorById(getIdCell(tr, td), color);
         }
     }
 }
 
+/**
+ * function setInputSum
+ *
+ * Функция устанавливает значение в ячейку для вывода суммы максимальных значений.
+ *
+ * @param {string|number|int|float} str - строка или число.
+ */
 function setInputSum(str) {
     document.getElementById("result").value = str;
+}
+
+/**
+ * function setValueM
+ *
+ * Функция устанавливает значение глобальной переменной хараткризующей размерность таблицы M.
+ *
+ * @param {int} m - значение M.
+ */
+function setValueM(m) {
+    window.sizeM = m;
+}
+
+/**
+ * function setValueN
+ *
+ * Функция устанавливает значение глобальной переменной хараткризующей размерность таблицы N.
+ *
+ * @param {int} n - значение N.
+ */
+function setValueN(n) {
+    window.sizeN = n;
+}
+
+/**
+ * function setIsAddRepeatMaxValue
+ *
+ * Функция устанавливает значение глобальной переменной харктеризующей вид суммирования, либо
+ * суммировать повторяющиеся максимальный значения в одной строке, либо суммировать только одно из них.
+ *
+ * @param {boolean} bool - значение переменной.
+ */
+function setIsAddRepeatMaxValue(bool) {
+    window.isAddRepeatMaxValue = bool;
+}
+
+/**
+ * function getValueM
+ *
+ * Функция возвращает значение глобальной переменной sizeM.
+ *
+ * @return {int} - значение sizeM.
+ */
+function getValueM() {
+    return window.sizeM;
+}
+
+/**
+ * function getValueN
+ *
+ * Функция возвращает значение глобальной переменной sizeN.
+ *
+ * @return {int} - значение sizeN.
+ */
+function getValueN() {
+    return window.sizeN;
 }
 
 /**
@@ -227,7 +357,7 @@ function setInputSum(str) {
  * @return {int} - минимальное значение чисел при генерации рандомных значений для таблицы.
  */
 function getValueMinRandom() {
-    return getValueInputNumber("min_random");
+    return getValueInputFloat("min_random");
 }
 
 /**
@@ -236,33 +366,34 @@ function getValueMinRandom() {
  * @return {int} - максимальное значение чисел при генерации рандомных значений для таблицы.
  */
 function getValueMaxRandom() {
-    return getValueInputNumber("max_random");
+    return getValueInputFloat("max_random");
 }
 
-function setValueM(m) {
-    window.sizeM = m;
+/**
+ * function getValueInputFloat
+ *
+ * Функция парсит значение поля с id, пытаясь обнаружить там вещественное значение и возвращает его. Если значение
+ * не обнаруженно, то вернется "NaN".
+ *
+ * @param {string} id - id поля.
+ * @return {float} - значение поля.
+ */
+function getValueInputFloat(id) {
+    var i = parseFloat(document.getElementById(id).value);
+    if (isNaN(i)) {
+        return "NaN";
+    }
+    return i;
 }
 
-function setValueN(n) {
-    window.sizeN = n;
-}
-
-function setIsAddRepeatMaxValue(bool) {
-    window.isAddDublicatesMaxValue = bool;
-}
-
-function getValueM() {
-    return window.sizeM;
-}
-
-function getValueN() {
-    return window.sizeN;
-}
-
-function isAddRepeatMaxValue() {
-    return window.isAddDublicatesMaxValue;
-}
-
+/**
+ * function getIsAddRepeatMaxValue
+ *
+ * Функция возвращает значение CheckBox, отвечающего за установку значения глобальной переменной
+ * isAddRepeatMaxValue.
+ *
+ * @return {boolean} - значение установленное в CheckBox.
+ */
 function getIsAddRepeatMaxValue() {
     if (document.getElementById("checkbox").checked == true) {
         return true;
@@ -271,12 +402,34 @@ function getIsAddRepeatMaxValue() {
     }
 }
 
+/**
+ * function getValueInputM
+ *
+ * Функция возвращает значение, которое установлено в поле с id="size_m". Важно понять, что данный метод отличается
+ * от getValueM тем, что возвращает текущее значение поля GUI, а не значение глобальной переменной. Различие данных
+ * двух методов позволяет избежать ситуации, когда пользователь сгенерировал таблицу, ввёл данные, изменил значение
+ * в полях и решил посчитать сумму максимальных элементов. Вполне понятно, что если брать значение сразу из поля, то
+ * можно наткнуться на несоответствие значения и реальной таблицы.
+ *
+ * @return {Number} - значение переменной.
+ */
 function getValueInputM() {
-    return getValueInputNumber("size_m");
+    return getValueInputInteger("size_m");
 }
 
+/**
+ * function getValueInputN
+ *
+ * Функция возвращает значение, которое установлено в поле с id="size_n". Важно понять, что данный метод отличается
+ * от getValueN тем, что возвращает текущее значение поля GUI, а не значение глобальной переменной. Различие данных
+ * двух методов позволяет избежать ситуации, когда пользователь сгенерировал таблицу, ввёл данные, изменил значение
+ * в полях и решил посчитать сумму максимальных элементов. Вполне понятно, что если брать значение сразу из поля, то
+ * можно наткнуться на несоответствие значения и реальной таблицы.
+ *
+ * @return {Number} - значение переменной.
+ */
 function getValueInputN() {
-    return getValueInputNumber("size_n");
+    return getValueInputInteger("size_n");
 }
 
 /**
@@ -286,16 +439,19 @@ function getValueInputN() {
  * @return {int} - значение ячейки таблицы.
  */
 function getValueCell(id) {
-    return getValueInteger(id);
+    return getValueInputFloat(id);
 }
 
 /**
- * function getValueInputNumber
+ * function getValueInputInteger
+ *
+ * Функция парсит значение поля с id, пытаясь обнаружить там целочисленное значение и возвращает его. Если значение
+ * не обнаруженно, то вернутся ноль.
  *
  * @param {string} id - id поля.
  * @return {int} - значение поля.
  */
-function getValueInputNumber(id) {
+function getValueInputInteger(id) {
     var i = parseInt(document.getElementById(id).value);
     if (isNaN(i)) {
         i = 0;
@@ -314,4 +470,15 @@ function getValueInputNumber(id) {
  */
 function getIdCell(tr, td) {
     return "TR_" + tr + "TD" + td;
+}
+
+/**
+ * function isAddRepeatMaxValue
+ *
+ * Функция возвращает значение глобальной перменной isAddRepeatMaxValue.
+ *
+ * @return {Number} - значение переменной.
+ */
+function isAddRepeatMaxValue() {
+    return window.isAddRepeatMaxValue;
 }
