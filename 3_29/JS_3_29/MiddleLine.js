@@ -10,13 +10,15 @@
 function getMiddleIndex(array_number) {
 
     var sum = getSum(array_number);
-    var sum_left = 0.0;
-    var sum_right = sum;
+    var sum_left = array_number[0];
+    var sum_right = sum - sum_left;
 
-    var module = sum;
-    var index = -1;
+    var module = Math.abs(sum_right - sum_left);
+    var index = 0;
 
-    for (var i = 0; i < array_number.length; i++){
+    var end_index = array_number.length - 1;
+
+    for (var i = 1; i < end_index; i++){
 
         sum_left += array_number[i];
         sum_right = sum - sum_left;
