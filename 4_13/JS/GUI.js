@@ -6,8 +6,7 @@
 function upDateTableValueColorMax() {
 
     setBackgroundColorAllCell("white")
-    var bool = isAddRepeatMaxValue();
-    setInputSum(getSumMaxValueInStrings(bool));
+    setInputSum(getResult());
 
 }
 
@@ -115,72 +114,7 @@ function setValueAllCells(value) {
 }
 
 /**
- * function getSumMaxValueInStrings
- *
- * Функция возвращает сумму максимальных значений в каждой строчке. В случае если переданный флаг true,
- * то при нахождение нескольких максимальных значений в одной строчке, она их суммирует.
- *
- * @param {boolean} is_sum_repeat
- */
-function getSumMaxValueInStrings(is_sum_repeat) {
-
-    if (is_sum_repeat) {
-        return getSumMaxValueInStringsTrueRepeat();
-    } else {
-        return getSumMaxValueInStringsFalseRepeat();
-    }
-
-}
-
-/**
- * function getSumMaxValueInStringsFalseRepeat
- *
- * Функция находит в каждой строчке таблицы максимальное значение, после чего закрашивает все ячейки с максимальным
- * значением для определенной строчки. Если в строке имеется несколько значений с максимальным значением,
- * то закрашивает все.
- *
- * В случае, если в ячейке некорректно введено число и из значения в ячейки невозможно получить float, ячейка
- * окрашивается в красный цвет.
- *
- * Сумма максимальных ячеек строчек суммируется и возвращается. Если в ячейки несколько максимальных значений, то
- * суммируется только одно из них.
- *
- * @return {number} - сумма максимальных значений.
- */
-function getSumMaxValueInStringsFalseRepeat() {
-
-    var m = getValueM();
-    var n = getValueN();
-
-    var sum = 0;
-
-    for (var myM = 0; myM < m; myM++) {
-
-        var max = "NaN";
-
-        for (var myN = 0; myN < n; myN++) {
-
-            var id = getIdCell(myM, myN);
-            var value = getValueCell(id);
-
-            if (value === "NaN") {
-                setBackgroundColorById(id, "red");
-                continue;
-            } else {
-                setBackgroundColorById(id, "white");
-            }
-            if (value > max || max === "NaN") {
-                max = value;
-            }
-        }
-        setBackgroundColorCellValueInString(myM, max, "green");
-        sum += max;
-    }
-    return sum;
-}
-
-/**
- * function getSumMaxValueInStringsTrueRepeat
+ * function getResult
  *
  * Функция находит в каждой строчке таблицы максимальное значение, после чего закрашивает все ячейки с максимальным
  * значением для определенной строчки. Если в строке имеется несколько значений с максимальным значением,
@@ -194,18 +128,20 @@ function getSumMaxValueInStringsFalseRepeat() {
  *
  * @return {number} - сумма максимальных значений.
  */
-function getSumMaxValueInStringsTrueRepeat() {
+function getResult() {
 
-    var m = getValueM();
-    var n = getValueN();
+    var m = getValueM(); // Количество строк
+    var n = getValueN(); // Количество столбцов
 
-    var sum = 0;
+    var array_max = []; // Массив с максимальными элементами каждой строки
 
     for (var myM = 0; myM < m; myM++) {
 
-        var max = "NaN";
-        var count = 0;
+        var max = "NaN"; // Максимальное значение внутри строки с номером "myM"
 
+        /*
+            Цикл нахождения максимального элемента внутри строки с номером "myM";
+         */
         for (var myN = 0; myN < n; myN++) {
 
             var id = getIdCell(myM, myN);
@@ -226,10 +162,23 @@ function getSumMaxValueInStringsTrueRepeat() {
             }
         }
 
-        setBackgroundColorCellValueInString(myM, max, "green");
-        sum += (max * count);
+        setBackgroundColorCellValueInString(myM, max, "green"); // Установка цвета на ячейки с максимальными элементами
+
+        array_max[myM] = max; // Запись в массив максимального значения строки "myM"
     }
-    return sum;
+
+    var result = 0.0; // Результат
+    var end_i = array_max.length % 2 === 0 ? array_max.length / 2 : (array_max.length + 1) / 2;
+    /*
+        В следующем цикле мы находим значение выражения X1 * Xn-1 + X2 * Xn-2 ... Xn-1 * X2 + Xn * X1, как видно
+        из записи, первое и последние, второе и предпоследние слогаемое равны между собой, что бы эти одинаковые
+        произведения не считать дважды, мы считаем его один раз и умножаем на 2, что сокращает цикл в два раза.
+     */
+    for (var i = 0; i < end_i; i++) {
+        result += 2 * (array_max[i] * array_max[array_max.length - 1 - i]);
+    }
+
+    return result;
 }
 
 /**
@@ -318,18 +267,6 @@ function setValueN(n) {
 }
 
 /**
- * function setIsAddRepeatMaxValue
- *
- * Функция устанавливает значение глобальной переменной харктеризующей вид суммирования, либо
- * суммировать повторяющиеся максимальный значения в одной строке, либо суммировать только одно из них.
- *
- * @param {boolean} bool - значение переменной.
- */
-function setIsAddRepeatMaxValue(bool) {
-    window.isAddRepeatMaxValue = bool;
-}
-
-/**
  * function getValueM
  *
  * Функция возвращает значение глобальной переменной sizeM.
@@ -384,22 +321,6 @@ function getValueInputFloat(id) {
         return "NaN";
     }
     return i;
-}
-
-/**
- * function getIsAddRepeatMaxValue
- *
- * Функция возвращает значение CheckBox, отвечающего за установку значения глобальной переменной
- * isAddRepeatMaxValue.
- *
- * @return {boolean} - значение установленное в CheckBox.
- */
-function getIsAddRepeatMaxValue() {
-    if (document.getElementById("checkbox").checked == true) {
-        return true;
-    } else {
-        return false;
-    }
 }
 
 /**
@@ -470,15 +391,4 @@ function getValueInputInteger(id) {
  */
 function getIdCell(tr, td) {
     return "TR_" + tr + "TD" + td;
-}
-
-/**
- * function isAddRepeatMaxValue
- *
- * Функция возвращает значение глобальной перменной isAddRepeatMaxValue.
- *
- * @return {Number} - значение переменной.
- */
-function isAddRepeatMaxValue() {
-    return window.isAddRepeatMaxValue;
 }

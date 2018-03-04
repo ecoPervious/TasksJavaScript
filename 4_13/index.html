@@ -18,37 +18,28 @@
             <input id="gen" class="button" type="button" value="Сгенерировать случайные числа"
                    onclick="onClickGenerationRandom()"/>
         </td>
-        <td>От минимум: </td>
+        <td>От минимум:</td>
         <td><input id="min_random" class="text" type="number" step="0.1" onkeyup="onKeyUpRandMin()"/></td>
-        <td>До максимум: </td>
+        <td>До максимум:</td>
         <td><input id="max_random" class="text" type="number" step="0.1" onkeyup="onKeyUpRandMax()"/></td>
     </tr>
     <tr>
         <td>
             <input class="button" type="button" value="Сгенерировать таблицу" onclick="onClickGenerationTable()"/>
         </td>
-        <td>Количество строк (M): </td>
+        <td>Количество строк (M):</td>
         <td><input id="size_m" class="text" type="number" min="0"/></td>
-        <td>Количество столбцов (N): </td>
+        <td>Количество столбцов (N):</td>
         <td><input id="size_n" class="text" type="number" min="0"/></td>
     </tr>
     <tr>
         <td>
             <input class="button" type="button" value="Установить везде нули" onclick="onClickSetZeroAllCells()"/>
         </td>
-        <td>
-            <input id="checkbox" type="checkbox" onclick="onClickCheckBox()"/>
-        </td>
-        <td>
-            Суммировать повторяющиеся
-        </td>
-        <td>
-            Сумма:
-        </td>
-        <td>
-            <input id="result" type="text" disabled/>
-        </td>
-
+        <td>Результат:</td>
+        <td><input id="result" type="text" disabled/></td>
+        <td></td>
+        <td></td>
     </tr>
 </table>
 <table id="main_table">

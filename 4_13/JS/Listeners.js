@@ -20,16 +20,6 @@ function onClickSetZeroAllCells() {
 }
 
 /**
- * function onClickCheckBox
- *
- * Слушать на нажатие по CheckBox.
- */
-function onClickCheckBox() {
-    setIsAddRepeatMaxValue(getIsAddRepeatMaxValue());
-    upDateTableValueColorMax();
-}
-
-/**
  * function onClickGenerationTable
  *
  * Слушатель на нажатие по кнопке генерации таблицы.
